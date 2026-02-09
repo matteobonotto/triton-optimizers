@@ -1,0 +1,37 @@
+import os
+
+from . import optim, const, profiling, utils
+
+from .optim.adam import Adam
+from .optim.rmsprop import RMSprop
+
+__all__ = [
+    "Adam", "RMSprop"
+]
+
+from .utils import is_cuda_available
+from pathlib import Path
+from .const import ROOT_PATH
+
+### triton-dejavu cache data
+
+import stat
+
+
+def ensure_dejavu_cache_dir(path: Path):
+    # 1. Create directory if it does not exist
+    path.mkdir(parents=True, exist_ok=True)
+
+    # 2. Ensure permissions: o+rw (add read & write for others)
+    st = path.stat()
+    new_mode = st.st_mode | stat.S_IROTH | stat.S_IWOTH
+    os.chmod(path, new_mode)
+
+
+dir = Path("triton_dejavu_cache")
+ensure_dejavu_cache_dir(path=dir)
+
+os.environ["TRITON_DEJAVU_STORAGE"] = str(ROOT_PATH / dir)
+
+if not is_cuda_available() or "TRITON_IS_DEBUGGING" in os.environ.keys():
+    os.environ["TRITON_INTERPRET"] = "1"
