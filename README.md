@@ -3,6 +3,14 @@
 
 Fused implementation of the most famous optimizers via triton-lang. All the optimizers are compatible with `torch.optim` module, so you ther's no need for heavy change in your code, just import the optimizer you want and use it! The autotuning is done via `triton-dejavu` (see [here](https://github.com/IBM/triton-dejavu)), which automatically caches the best configs found by the autotuner, so you'll need to run the autotuning only once (per machine) and always use the fastest confiugurations.
 
+Supported optimizers:
+- RMSprop
+- Adam
+
+Coming soon:
+- SGD
+- AdamW
+- Adagrad
 
 ## Installation
 Follow these steps:
